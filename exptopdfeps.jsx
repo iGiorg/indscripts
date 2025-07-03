@@ -7,9 +7,10 @@
  * ზომის მიხედვით, აკოპირებს იქ ობიექტს და შემდეგ ახორციელებს
  * ექსპორტს PDF ან EPS ფორმატში.
  *
- * ვერსია: 5.0 (სტაბილური)
+ * ვერსია: 5.2 (განახლებული)
  * - კოდი მუშაობს მხოლოდ ერთ მონიშნულ ობიექტზე.
  * - ამოღებულია დაჯგუფების და მრავალჯერადი მონიშვნის ლოგიკა.
+ * - Control Panel-დან width და height მნიშვნელობების გამოყენება.
  */
 
 #target indesign;
@@ -48,10 +49,10 @@ function exportSingleObject() {
 
         if (targetFile) {
             try {
-                // 4. ობიექტის ზომების აღება
-                var itemBounds = selectedItem.visibleBounds;
-                var itemWidth = itemBounds[3] - itemBounds[1];
-                var itemHeight = itemBounds[2] - itemBounds[0];
+                // 4. ობიექტის ზომების აღება Control Panel-დან
+                var itemBounds = selectedItem.geometricBounds; // ობიექტის გეომეტრიული საზღვრები
+                var itemWidth = itemBounds[3] - itemBounds[1]; // სიგანე
+                var itemHeight = itemBounds[2] - itemBounds[0]; // სიმაღლე
 
                 // 5. ახალი დოკუმენტის შექმნა
                 tempDoc = app.documents.add();
