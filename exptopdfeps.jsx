@@ -84,8 +84,22 @@ function exportSingleObject() {
                 if (isPDF) {
                     var pdfPreset = app.pdfExportPresets.item("PDF/X-4:2008");
                     if (!pdfPreset.isValid) {
-                        pdfPreset = app.pdfExportPresets.item("[High Quality Print]");
-                        alert('PDF პრესეტი "PDF/X-4:2008" ვერ მოიძებნა. სკრიპტი გამოიყენებს "[High Quality Print]" პრესეტს.');
+                        try {
+                            // PDF/X-4:2008 პრესეტის შექმნა
+                            pdfPreset = app.pdfExportPresets.add();
+                            pdfPreset.name = "PDF/X-4:2008";
+                            pdfPreset.compatibility = PDFCompatibility.ACROBAT_7;
+                            pdfPreset.exportReaderSpreads = false;
+                            pdfPreset.viewPDF = false;
+                            pdfPreset.colorBitmapCompression = BitmapCompression.JPEG;
+                            pdfPreset.colorBitmapQuality = PDFCompressionQuality.MAXIMUM;
+                            pdfPreset.monochromeBitmapCompression = BitmapCompression.JPEG;
+                            pdfPreset.monochromeBitmapQuality = PDFCompressionQuality.MAXIMUM;
+                            pdfPreset.transparencyFlattenerPreset = app.transparencyFlattenerPresets.item("[High Resolution]");
+                            alert('PDF/X-4:2008 პრესეტი ვერ მოიძებნა და ახალი პრესეტი შეიქმნა.');
+                        } catch (e) {
+                            alert('PDF/X-4:2008 პრესეტის შექმნა ვერ მოხერხდა: ' + e.message);
+                        }
                     }
                     if (!pdfPreset.isValid) {
                         throw new Error('ვერც "PDF/X-4:2008" და ვერც "[High Quality Print]" პრესეტი ვერ მოიძებნა.');
