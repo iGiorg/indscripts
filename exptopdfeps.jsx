@@ -7,7 +7,7 @@
  * ზომის მიხედვით, აკოპირებს იქ ობიექტს და შემდეგ ახორციელებს
  * ექსპორტს PDF ან EPS ფორმატში.
  *
- * ვერსია: 5.2 (განახლებული)
+ * ვერსია: 5.4 (განახლებული)
  * - კოდი მუშაობს მხოლოდ ერთ მონიშნულ ობიექტზე.
  * - ამოღებულია დაჯგუფების და მრავალჯერადი მონიშვნის ლოგიკა.
  * - Control Panel-დან width და height მნიშვნელობების გამოყენება.
@@ -83,27 +83,9 @@ function exportSingleObject() {
 
                 // 7. ექსპორტი
                 if (isPDF) {
-                    var pdfPreset = app.pdfExportPresets.item("PDF/X-4:2008");
+                    var pdfPreset = app.pdfExportPresets.item("[PDF/X-4:2008]");
                     if (!pdfPreset.isValid) {
-                        try {
-                            // PDF/X-4:2008 პრესეტის შექმნა
-                            pdfPreset = app.pdfExportPresets.add();
-                            pdfPreset.name = "PDF/X-4:2008";
-                            pdfPreset.compatibility = PDFCompatibility.ACROBAT_7;
-                            pdfPreset.exportReaderSpreads = false;
-                            pdfPreset.viewPDF = false;
-                            pdfPreset.colorBitmapCompression = BitmapCompression.JPEG;
-                            pdfPreset.colorBitmapQuality = PDFCompressionQuality.MAXIMUM;
-                            pdfPreset.monochromeBitmapCompression = BitmapCompression.JPEG;
-                            pdfPreset.monochromeBitmapQuality = PDFCompressionQuality.MAXIMUM;
-                            pdfPreset.transparencyFlattenerPreset = app.transparencyFlattenerPresets.item("[High Resolution]");
-                            alert('PDF/X-4:2008 პრესეტი ვერ მოიძებნა და ახალი პრესეტი შეიქმნა.');
-                        } catch (e) {
-                            alert('PDF/X-4:2008 პრესეტის შექმნა ვერ მოხერხდა: ' + e.message);
-                        }
-                    }
-                    if (!pdfPreset.isValid) {
-                        throw new Error('ვერც "PDF/X-4:2008" და ვერც "[High Quality Print]" პრესეტი ვერ მოიძებნა.');
+                        throw new Error('PDF პრესეტი "[PDF/X-4:2008]" ვერ მოიძებნა.');
                     }
                     
                     app.pdfExportPreferences.viewPDF = false;
