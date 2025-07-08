@@ -7,9 +7,10 @@
  * ზომის მიხედვით, აკოპირებს იქ ობიექტს და შემდეგ ახორციელებს
  * ექსპორტს PDF ან EPS ფორმატში.
  *
- * ვერსია: 5.0 (სტაბილური)
+ * ვერსია: 5.4 (განახლებული)
  * - კოდი მუშაობს მხოლოდ ერთ მონიშნულ ობიექტზე.
  * - ამოღებულია დაჯგუფების და მრავალჯერადი მონიშვნის ლოგიკა.
+ * - Control Panel-დან width და height მნიშვნელობების გამოყენება.
  */
 
 #target indesign;
@@ -48,10 +49,10 @@ function exportSingleObject() {
 
         if (targetFile) {
             try {
-                // 4. ობიექტის ზომების აღება
-                var itemBounds = selectedItem.visibleBounds;
-                var itemWidth = itemBounds[3] - itemBounds[1];
-                var itemHeight = itemBounds[2] - itemBounds[0];
+                // 4. ობიექტის ზომების აღება Control Panel-დან
+                var itemBounds = selectedItem.geometricBounds; // ობიექტის გეომეტრიული საზღვრები
+                var itemWidth = itemBounds[3] - itemBounds[1]; // სიგანე
+                var itemHeight = itemBounds[2] - itemBounds[0]; // სიმაღლე
 
                 // 5. ახალი დოკუმენტის შექმნა
                 tempDoc = app.documents.add();
@@ -82,13 +83,9 @@ function exportSingleObject() {
 
                 // 7. ექსპორტი
                 if (isPDF) {
-                    var pdfPreset = app.pdfExportPresets.item("PDF/X-4:2008");
+                    var pdfPreset = app.pdfExportPresets.item("[PDF/X-4:2008]");
                     if (!pdfPreset.isValid) {
-                        pdfPreset = app.pdfExportPresets.item("[High Quality Print]");
-                        alert('PDF პრესეტი "PDF/X-4:2008" ვერ მოიძებნა. სკრიპტი გამოიყენებს "[High Quality Print]" პრესეტს.');
-                    }
-                    if (!pdfPreset.isValid) {
-                        throw new Error('ვერც "PDF/X-4:2008" და ვერც "[High Quality Print]" პრესეტი ვერ მოიძებნა.');
+                        throw new Error('PDF პრესეტი "[PDF/X-4:2008]" ვერ მოიძებნა.');
                     }
                     
                     app.pdfExportPreferences.viewPDF = false;
